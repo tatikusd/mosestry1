@@ -11,11 +11,6 @@ make -f contrib/Makefiles/install-dependencies.gmake
 #To compile moses, run
 ./compile.sh --with-mm
 
- wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
-   tar zxvf boost_1_64_0.tar.gz 
-   cd boost_1_64_0/
-   ./bootstrap.sh 
-   ./b2 -j4 --prefix=$PWD --libdir=$PWD/lib64 --layout=system link=static install || echo FAILURE
 #install giza
 git clone https://github.com/moses-smt/mgiza.git
 cd mgiza
