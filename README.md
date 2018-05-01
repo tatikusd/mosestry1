@@ -35,4 +35,7 @@ cmake -DCMAKE_INSTALL_PREFIX=/home/tatik/mgiza -DBoost_INCLUDE_DIR=/home/tatik/m
 
 cmake -DCMAKE_INSTALL_PREFIX=/home/tatik/mgiza -BOOST_ROOT=/home/tatik/mosesdecoder/boost_1_64_0 -BOOST_INCLUDE_DIR=/home/tatik/mosesdecoder/boost_1_64_0/include 
 
+# prepare data
+perl scripts/training/clean-corpus-n.perl  /home/tatik/corpus/corpus ina jawa /home/tatik/corpus/train_clean 1 80
+
 cmake -DCMAKE_INSTALL_PREFIX=/home/tatik/mgiza -DBoost_ROOT=/home/tatik/mosesdecoder/boost_1_64_0 -DBoost_INCLUDE_DIR=/home/tatik/mosesdecoder/boost_1_64_0/include 
