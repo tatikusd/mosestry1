@@ -48,9 +48,13 @@ bin/build_binary /home/tatik/lm/train_arpa.jawa /home/tatik/lm/train_blm.jawa
 
 bin/build_binary /home/tatik/lm/train_arpa.ina /home/tatik/lm/train_blm.ina
 
+# train
 scripts/training/train-model.perl -root-dir /home/tatik/output -corpus /home/tatik/corpus/train_clean -f ina -e jawa -alignment grow-diag-final-and -lm 0:3:/home/tatik/lm/train_blm.ina:8 --external-bin-dir /home/tatik/mgiza/mgizapp/manual-compile/ --mgiza >/home/tatik/output/logoutput1.txt
 
-#hasil cek 
+scripts/training/train-model.perl -root-dir /home/tatik/output -corpus /home/tatik/corpus/train_clean -f jawa -e ina -alignment grow-diag-final-and -lm 0:3:/home/tatik/lm/train_blm.jawa:8 --external-bin-dir /home/tatik/mgiza/mgizapp/manual-compile/ --mgiza
+
+
+# hasil cek 
 echo "Pak Nala mau membela diri" | /home/tatik/mosesdecoder/bin/query /home/tatik/lm/train_arpa.ina
 Loading the LM will be faster if you build a binary file.
 Reading /home/tatik/lm/train_arpa.ina
@@ -63,4 +67,57 @@ OOVs:	0
 Tokens:	6
 Name:query	VmPeak:19712 kB	VmRSS:4192 kB	RSSMax:4804 kB	user:0.017188	sys:0.003437	CPU:0.020625	real:0.0205518
 
+#error
+================
+bin/moses -f /home/tatik/output/model/moses.ini
+Defined parameters (per moses.ini or switch):
+	config: /home/tatik/output/model/moses.ini 
+	distortion-limit: 6 
+	feature: UnknownWordPenalty WordPenalty PhrasePenalty PhraseDictionaryMemory name=TranslationModel0 num-features=4 path=/home/tatik/output/model/phrase-table.gz input-factor=0 output-factor=0 Distortion KENLM name=LM0 factor=0 path=/home/tatik/lm/train_blm.ina order=3 
+	input-factors: 0 
+	mapping: 0 T 0 
+	weight: UnknownWordPenalty0= 1 WordPenalty0= -1 PhrasePenalty0= 0.2 TranslationModel0= 0.2 0.2 0.2 0.2 Distortion0= 0.3 LM0= 0.5 
+line=UnknownWordPenalty
+FeatureFunction: UnknownWordPenalty0 start: 0 end: 0
+line=WordPenalty
+FeatureFunction: WordPenalty0 start: 1 end: 1
+line=PhrasePenalty
+FeatureFunction: PhrasePenalty0 start: 2 end: 2
+line=PhraseDictionaryMemory name=TranslationModel0 num-features=4 path=/home/tatik/output/model/phrase-table.gz input-factor=0 output-factor=0
+FeatureFunction: TranslationModel0 start: 3 end: 6
+line=Distortion
+FeatureFunction: Distortion0 start: 7 end: 7
+line=KENLM name=LM0 factor=0 path=/home/tatik/lm/train_blm.ina order=3
+FeatureFunction: LM0 start: 8 end: 8
+Loading UnknownWordPenalty0
+Loading WordPenalty0
+Loading PhrasePenalty0
+Loading Distortion0
+Loading LM0
+Loading TranslationModel0
+Start loading text phrase table. Moses format : [0.049] seconds
+Reading /home/tatik/output/model/phrase-table.gz
+----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
+****************************************************************************************************
+Created input-output object : [0.572] seconds
+======================
+ #cek translasi
+ bin/moses -f /home/tatik/output/model/moses.ini < in > mt-out
+# coba in
+Dan dalam menjalani plonco tersebut tidak hanya beberapa minggu
+Dugaan Pak Nala, para pengaco itu kok ada-ada saja
+bagaimana dengan kepergian hari ini 
+Agaknya rakyat sudah jemu dengan propaganda isapan jempol 
 
+Lan olehe ngenggoni kalenggahaning plonco mau ora hanya sawetara minggu 
+Rumangsane Pak Nala, para ngaco iku kok ana-ana bae 
+priye karo kepergian dina iki 
+jare rakyat wis jemu karo propaganda isapan jempol 
+
+Liyane demokrasi tuwuh kanthi becik, warga negara Amerika Serikat urip makmur jibar-jibur lan keamanan jinaja kanthi becik
+Ning aja ngethoki ukara sagelem-gelem
+Mulane ya pantes yen dipengeti nganggo pekan raya barang
+
+Liyane demokrasi tuwuh dengan becik, warga negara Amerika Serikat kehidupan makmur jibar-jibur dan keamanan jinaja dengan baik jika 
+tapi jangan memenggal kalimat semau sendiri 
+Makanya ya pantas bahwa dipengeti dengan pekan Internasional barang 
