@@ -37,16 +37,27 @@ cmake -DCMAKE_INSTALL_PREFIX=/home/tatik/mgiza -BOOST_ROOT=/home/tatik/mosesdeco
 
 cmake -DCMAKE_INSTALL_PREFIX=/home/tatik/mgiza -DBoost_ROOT=/home/tatik/mosesdecoder/boost_1_64_0 -DBoost_INCLUDE_DIR=/home/tatik/mosesdecoder/boost_1_64_0/include 
 # prepare data
+#lower case
+perl scripts/tokenizer/lowercase.perl < /home/tatik/corpus/corpus.ina > /home/tatik/corpus/train_lower.ina
+perl scripts/tokenizer/lowercase.perl < /home/tatik/corpus/corpus.jawa > /home/tatik/corpus/train_lower.jawa
+perl scripts/tokenizer/lowercase.perl < /home/tatik/corpus/test.ina > home/tatik/corpus/test_lower.ina
+perl scripts/tokenizer/lowercase.perl < /home/tatik/corpus/test.jawa > home/tatik/corpus/test_lower.jawa
+tuning
+#tokenizer
+perl scripts/tokenizer/tokenizer.perl < /home/tatik/corpus/train_lower.jawa > /home/tatik/corpus/train_token.jawa
+
+#clean
 perl scripts/training/clean-corpus-n.perl  /home/tatik/corpus/corpus ina jawa /home/tatik/corpus/train_clean 1 80
 
+#build KenLM
 bin/lmplz -o 3 </home/tatik/corpus/train_clean.ina >/home/tatik/lm/train_arpa.ina
-
 bin/lmplz -o 3 </home/tatik/corpus/train_clean.jawa >/home/tatik/lm/train_arpa.jawa
-
+#build binary lm for faster
 bin/build_binary /home/tatik/lm/train_arpa.jawa /home/tatik/lm/train_blm.jawa
-
 bin/build_binary /home/tatik/lm/train_arpa.ina /home/tatik/lm/train_blm.ina
 
+#cek lm
+echo "Awit kejaba wajib isih ana sing dijenengi kautaman!" | bin/query train_blm.jawa
 # train
 scripts/training/train-model.perl -root-dir /home/tatik/output -corpus /home/tatik/corpus/train_clean -f ina -e jawa -alignment grow-diag-final-and -lm 0:3:/home/tatik/lm/train_blm.ina:8 --external-bin-dir /home/tatik/mgiza/mgizapp/manual-compile/ --mgiza >/home/tatik/output/logoutput1.txt
 
