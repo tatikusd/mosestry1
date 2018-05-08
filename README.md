@@ -57,9 +57,16 @@ bin/build_binary /home/tatik/lm/train_arpa.jawa /home/tatik/lm/train_blm.jawa
 bin/build_binary /home/tatik/lm/train_arpa.ina /home/tatik/lm/train_blm.ina
 
 #cek lm
-echo "Awit kejaba wajib isih ana sing dijenengi kautaman!" | bin/query train_blm.jawa
+bin/query -b /home/tatik/lm/train_blm2.jawa < /home/tatik/lm/testlm.jawa 
+Apa=0 1 -4.838339	ana=53 1 -2.082122	siji=569 2 -2.5269594	wae=321 2 -1.4670643	sing=158 2 -1.6163422	wani=1018 2 -2.8330185	ora=45 2 -1.5900829	nyoba=180 2 -3.353175	ing=22 2 -1.3305914	mangsa=1809 2 -1.9925128pasa=4221 2 -0.33533984	iki=25 2 -0.9540273	</s>=2 2 -1.7787024	Total: -26.698277 OOV: 1
+Perplexity including OOVs:	113.16537800834283
+Perplexity excluding OOVs:	66.32258917139315
+OOVs:	1
+Tokens:	13
+Name:query	VmPeak:18672 kB	VmRSS:4308 kB	RSSMax:4684 kB	user:0	sys:0.003802	CPU:0.003802	real:0.00104566
+
 # train
-scripts/training/train-model.perl -root-dir /home/tatik/output -corpus /home/tatik/corpus/train_clean -f ina -e jawa -alignment grow-diag-final-and -lm 0:3:/home/tatik/lm/train_blm.ina:8 --external-bin-dir /home/tatik/mgiza/mgizapp/manual-compile/ --mgiza >/home/tatik/output/logoutput1.txt
+scripts/training/train-model.perl -root-dir /home/tatik/outputinalm2 -corpus /home/tatik/corpus/train_clean -f ina -e jawa -alignment grow-diag-final-and -lm 0:2:/home/tatik/lm/train_blm2.ina:8 --external-bin-dir /home/tatik/mgiza/mgizapp/manual-compile/ --mgiza 
 
 scripts/training/train-model.perl -root-dir /home/tatik/output -corpus /home/tatik/corpus/train_clean -f jawa -e ina -alignment grow-diag-final-and -lm 0:3:/home/tatik/lm/train_blm.jawa:8 --external-bin-dir /home/tatik/mgiza/mgizapp/manual-compile/ --mgiza
 # train 2
@@ -381,7 +388,7 @@ Name:query	VmPeak:19712 kB	VmRSS:4192 kB	RSSMax:4804 kB	user:0.017188	sys:0.0034
 # tuning
 ~/mosesdecoder/scripts/training/mert-moses.pl ~/moses_baseline_system/corpus/dev/news-test2008.true.fr ~/moses_baseline_system/corpus/dev/news-test2008.true.en ~/mosesdecoder/bin/moses ~/moses_baseline_system/translation_model/model/moses.ini --mertdir ~/mosesdecoder/bin/ --working-dir ~/moses_baseline_system/translation_model/mert-work
 
-scripts/training/mert-moses.pl /home/tatik/corpus/tuning-token-clean.jawa /home/tatik/corpus/tuning-token-clean.ina /home/tatik/mosesdecoder/bin/moses /home/tatik/output/model/moses.ini --mertdir /home/tatik/mosesdecoder/bin/ --working-dir /home/tatik/output/translation_model2/mert-work
+scripts/training/mert-moses.pl /home/tatik/corpus/tuning_clean.ina /home/tatik/corpus/tuning_clean.jawa /home/tatik/mosesdecoder/bin/moses /home/tatik/outputinalm2/model/moses.ini --mertdir /home/tatik/mosesdecoder/bin/ --working-dir /home/tatik/outputinalm2/translation_model/mert-work
 
 # error
 ================
@@ -419,12 +426,15 @@ Created input-output object : [0.572] seconds
 ======================
 # testing
  ~/mosesdecoder/scripts/training/filter-model-given-input.pl ~/moses_baseline_system/translation_model/filtered-newstest2011 ~/moses_baseline_system/translation_model/mert-work/moses.ini ~/moses_baseline_system/corpus/test/newstest2011.true.fr
- 
+scripts/training/filter-model-given-input.pl ~/moses_baseline_system/translation_model/filtered-newstest2011 ~/moses_baseline_system/translation_model/mert-work/moses.ini ~/moses_baseline_system/corpus/test/newstest2011.true.fr
+
  # cek translasi
- bin/moses -f /home/tatik/output/model/moses.ini < in > mt-out
+ bin/moses -f /home/tatik/outputinalm2/translationmodel/moses.ini < in > mt-out
  
 ~/mosesdecoder/bin/moses -f ~/moses_baseline_system/translation_model/filtered-newstest2011/moses.ini < ~/moses_baseline_system/corpus/test/newstest2011.true.fr > ~/moses_baseline_system/translation_model/newstest2011.translated.en
- 
+
+# bleu
+scripts/generic/multi-bleu.perl -lc corpus/test.tok.en < train.jb-en/test.translated.en
 # coba ina
 Dan dalam menjalani plonco tersebut tidak hanya beberapa minggu
 Dugaan Pak Nala, para pengaco itu kok ada-ada saja
